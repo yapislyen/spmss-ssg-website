@@ -26,16 +26,30 @@
       const email = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // login success
-          sessionStorage.setItem("loggedIn", "true");
-window.location.href = "index.html";
-        })
-        .catch((error) => {
-          document.getElementById("error").innerText =
-            "Invalid email or password";
-        });
+ signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+
+    // DEFAULT ROLE
+    let role = "student";
+
+    // CHANGE THESE EMAILS TO YOUR REAL ACCOUNTS
+    if (email === "ssgadmin@school.com") {
+      role = "admin";
+    } 
+    else if (email === "president@school.com") {
+      role = "officer";
+    }
+
+    // SAVE LOGIN STATE
+    sessionStorage.setItem("loggedIn", "true");
+    sessionStorage.setItem("role", role);
+
+    window.location.href = "index.html";
+  })
+  .catch((error) => {
+    document.getElementById("error").innerText = "Login failed";
+  });
     };
   </script>
 
