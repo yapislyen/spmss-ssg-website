@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Announcements</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+  <h1>Announcements</h1>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="announcements.html">Announcements</a>
+  <a href="calendar.html">Calendar</a>
+  <a href="finance.html">Finance</a>
+  <a href="documents.html">Documents</a>
+
+  <span class="auth-buttons">
+    <button onclick="goLogin()">Officer Login</button>
+    <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
+  </span>
+</nav>
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <h2>📢 Latest Announcements</h2>
+  </section>
+
+  <!-- FORM -->
+  <section class="announcement-form">
+    <h3>➕ Post New Announcement</h3>
+
+    <input type="text" id="title" placeholder="Announcement title">
+    <textarea id="content" placeholder="Announcement content"></textarea>
+    <button onclick="addAnnouncement()">Post</button>
+  </section>
+
+  <!-- FEED -->
+  <section class="announcement-container" id="announcementList">
+
+    <div class="announcement">
+      <h3>📢 Welcome to SSG Portal</h3>
+      <p>The official student government hub is now live.</p>
+      <small>Posted: June 2026</small>
+    </div>
+
+    <div class="announcement">
+      <h3>📅 Upcoming School Event</h3>
+      <p>Details will be posted soon.</p>
+      <small>Posted: June 2026</small>
+    </div>
+
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+<script src="script.js"></script>
+
+</body>
+</html>

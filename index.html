@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPMSS SSG Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <h1>SPMSS SSG HUB</h1>
+
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="announcements.html">Announcements</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="finance.html">Finance</a>
+    <a href="documents.html">Documents</a>
+  </nav>
+
+  <div class="auth-buttons">
+    <button onclick="goLogin()">Officer Login</button>
+    <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h2>SPMSS SSG HUB</h2>
+
+  <p>
+    Central hub for announcements,
+    proposals, records, finance,
+    and student government activities.
+  </p>
+</section>
+
+<section class="home-section">
+  <div class="section-header">
+    <h2>📢 Announcements</h2>
+    <a href="announcements.html">View All →</a>
+  </div>
+
+  <div class="preview-list">
+    <div class="preview-item">
+      Welcome to the official SPMSS SSG Hub.
+    </div>
+
+    <div class="preview-item">
+      School year announcements will be posted here.
+    </div>
+
+    <div class="preview-item">
+      Upcoming student activities will be announced soon.
+    </div>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-header">
+    <h2>⚡ Quick Access</h2>
+  </div>
+
+  <section class="cards">
+<a href="announcements.html" class="card card-blue">
+  <span>📢</span>
+  <p>Announcements</p>
+</a>
+
+<a href="calendar.html" class="card card-green">
+  <span>📅</span>
+  <p>Calendar</p>
+</a>
+
+<a href="documents.html" class="card card-orange">
+  <span>💡</span>
+  <p>Documents</p>
+</a>
+
+<a href="finance.html" class="card card-red">
+  <span>💰</span>
+  <p>Finance</p>
+</a>
+</section>
+
+  <footer>
+    <p>SPMSS Student Government © 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
