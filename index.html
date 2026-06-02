@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script>
+  if (sessionStorage.getItem("loggedIn") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SPMSS SSG Portal</title>
   <link rel="stylesheet" href="style.css">
 </head>
+<script>
+function logout() {
+  sessionStorage.removeItem("loggedIn");
+  window.location.href = "login.html";
+}
+
+// optional UI control (simple version)
+window.onload = function () {
+  const isLoggedIn = sessionStorage.getItem("loggedIn");
+
+  if (isLoggedIn === "true") {
+    document.getElementById("logoutBtn").style.display = "inline-block";
+  }
+};
+</script>
 <body>
 
 <header class="navbar">
@@ -90,3 +110,6 @@
   <script src="script.js"></script>
 </body>
 </html>
+function goLogin() {
+  window.location.href = "login.html";
+}
