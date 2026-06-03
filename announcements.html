@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="style.css">
 
   <script>
-    // 🔐 LOGIN CHECK
     if (sessionStorage.getItem("loggedIn") !== "true") {
       window.location.href = "login.html";
     }
@@ -21,6 +20,7 @@
     function logout() {
       sessionStorage.removeItem("loggedIn");
       sessionStorage.removeItem("role");
+      sessionStorage.removeItem("email");
       window.location.href = "login.html";
     }
   </script>
@@ -76,7 +76,6 @@
     orderBy
   } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // 🔥 Firebase config (same as login page)
   const firebaseConfig = {
     apiKey: "AIzaSyDZP1CZVJgFLWdxypAyNB2Iqxf3I-zt8y0",
     authDomain: "spmss-ssg-hub.firebaseapp.com",
@@ -89,8 +88,8 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // 🔐 ROLE CONTROL
   const role = sessionStorage.getItem("role");
+  const email = sessionStorage.getItem("email");
 
   window.onload = function () {
     const postBox = document.getElementById("postBox");
@@ -98,9 +97,8 @@
 
     if (logoutBtn) logoutBtn.style.display = "inline-block";
 
-    // only officers+ can post
-    if (role === "student") {
-      if (postBox) postBox.style.display = "none";
+    if (role === "student" && postBox) {
+      postBox.style.display = "none";
     }
   };
 
@@ -111,13 +109,12 @@
 
     if (!title || !content) return;
 
-    const now = new Date();
-    const time = now.toLocaleString();
-
     await addDoc(collection(db, "announcements"), {
       title,
       content,
-      time
+      time: new Date().toLocaleString(),
+      role,
+      author: email
     });
 
     document.getElementById("title").value = "";
@@ -126,7 +123,7 @@
     loadAnnouncements();
   };
 
-  // 📥 LOAD ANNOUNCEMENTS
+  // 📥 LOAD ANNOUNCEMENTS (UI UPGRADED)
   async function loadAnnouncements() {
     const list = document.getElementById("announcementList");
     list.innerHTML = "";
@@ -134,16 +131,20 @@
     const q = query(collection(db, "announcements"), orderBy("time", "desc"));
     const snapshot = await getDocs(q);
 
-    snapshot.forEach((doc) => {
-      const a = doc.data();
+    snapshot.forEach((docSnap) => {
+      const a = docSnap.data();
 
       const div = document.createElement("div");
-      div.classList.add("announcement");
+      div.classList.add("ann-card");
 
       div.innerHTML = `
         <h3>${a.title}</h3>
         <p>${a.content}</p>
-        <small style="color:gray;">Posted: ${a.time}</small>
+
+        <small>
+          Posted by: ${a.role} (${a.author}) <br>
+          ${a.time}
+        </small>
       `;
 
       list.appendChild(div);

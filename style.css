@@ -281,3 +281,23 @@ footer {
   pointer-events: none;
   filter: grayscale(100%);
 }
+.ann-card {
+  background: white;
+  padding: 18px;
+  margin: 12px 0;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.ann-card h3 {
+  margin-bottom: 8px;
+}
+
+.ann-card p {
+  margin-bottom: 10px;
+}
+
+.ann-card small {
+  color: gray;
+  font-size: 12px;
+}
