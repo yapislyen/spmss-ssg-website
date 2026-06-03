@@ -15,18 +15,129 @@
     }
   </script>
 
-  <!-- 🔗 GO LOGIN -->
-  <script>
-    function goLogin() {
-      window.location.href = "login.html";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZP1CZVJgFLWdxypAyNB2Iqxf3I-zt8y0",
+      authDomain: "spmss-ssg-hub.firebaseapp.com",
+      projectId: "spmss-ssg-hub",
+      storageBucket: "spmss-ssg-hub.firebasestorage.app",
+      messagingSenderId: "399203282033",
+      appId: "1:399203282033:web:96587b2e0fb9b2eab93fd0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const role = sessionStorage.getItem("role");
+
+    // 🔥 WELCOME TEXT
+    const welcomeTitle = document.getElementById("welcomeTitle");
+    const welcomeText = document.getElementById("welcomeText");
+
+if (welcomeTitle && role) {
+  welcomeTitle.innerText = `Welcome, ${role.toUpperCase()}`;
+}
+
+if (welcomeText && role) {
+  welcomeText.innerText =
+    "SPMSS Supreme Student Government Hub — centralized platform for announcements, records, and administrative operations. Access is managed based on assigned role permissions.";
+}
+
+    // 📢 LOAD PREVIEW ANNOUNCEMENTS
+    async function loadPreviewAnnouncements() {
+      const list = document.getElementById("previewList");
+      list.innerHTML = "";
+
+      const q = query(collection(db, "announcements"), orderBy("time", "desc"));
+      const snapshot = await getDocs(q);
+
+      let count = 0;
+
+      snapshot.forEach((doc) => {
+        if (count >= 3) return;
+
+        const a = doc.data();
+
+        const div = document.createElement("div");
+        div.classList.add("preview-item");
+
+        div.innerHTML = `
+          <strong>${a.title}</strong><br>
+          <small>${a.time}</small>
+        `;
+
+        list.appendChild(div);
+        count++;
+      });
+
+      if (count === 0) {
+        list.innerHTML = `<div class="preview-item">No announcements yet.</div>`;
+      }
     }
+
+    // 🚀 INIT PAGE
+    window.onload = function () {
+
+      const logoutBtn = document.getElementById("logoutBtn");
+      const financeCard = document.getElementById("financeCard");
+      const userStatusBtn = document.getElementById("userStatusBtn");
+
+      // logout button
+      if (logoutBtn) {
+        logoutBtn.style.display = "inline-block";
+      }
+
+      // role-based finance lock
+      if (role === "student" && financeCard) {
+        financeCard.classList.add("disabled");
+      }
+
+      // 🔥 STEP 3 (FIXED)
+      if (userStatusBtn) {
+        if (!role) {
+          userStatusBtn.innerText = "Not logged in";
+        } else {
+          userStatusBtn.innerText = `Logged in as ${role}`;
+        }
+      }
+
+      loadPreviewAnnouncements();
+      console.log("Role:", role);
+    };
+
+    // logout
+    window.logout = function () {
+      sessionStorage.removeItem("loggedIn");
+      sessionStorage.removeItem("role");
+      sessionStorage.removeItem("email");
+      window.location.href = "login.html";
+    };
+
+    window.goLogin = function () {
+      window.location.href = "login.html";
+    };
   </script>
 </head>
 
 <body>
 
 <header class="navbar">
-  <h1>SPMSS SSG HUB</h1>
+
+  <div class="logo-area">
+    <img src="spmss logo.png" class="logo">
+    <img src="ssg logo.png" class="logo">
+
+    <h1>SPMSS SSG HUB</h1>
+  </div>
 
   <nav class="nav-links">
     <a href="index.html">Home</a>
@@ -37,15 +148,17 @@
   </nav>
 
   <div class="auth-buttons">
-    <button onclick="goLogin()">Officer Login</button>
+    <button id="userStatusBtn">Loading...</button>
     <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
   </div>
+
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <h2>SPMSS SSG HUB</h2>
-  <p>
+  <h2 id="welcomeTitle">SPMSS SSG HUB</h2>
+
+  <p id="welcomeText">
     Central hub for announcements,
     proposals, records, finance,
     and student government activities.
@@ -59,15 +172,13 @@
     <a href="announcements.html">View All →</a>
   </div>
 
-  <div class="preview-list">
-    <div class="preview-item">Welcome to the official SPMSS SSG Hub.</div>
-    <div class="preview-item">School year announcements will be posted here.</div>
-    <div class="preview-item">Upcoming student activities will be announced soon.</div>
+  <div class="preview-list" id="previewList">
+    <div class="preview-item">Loading announcements...</div>
   </div>
 </section>
 
 <!-- QUICK ACCESS -->
-<section class="home-section" id="quickAccessSection">
+<section class="home-section">
   <div class="section-header">
     <h2>⚡ Quick Access</h2>
   </div>
@@ -97,48 +208,9 @@
   </section>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p>SPMSS Student Government © 2026</p>
 </footer>
-
-<!-- 🔐 MAIN SCRIPT -->
-<script>
-  function logout() {
-    sessionStorage.removeItem("loggedIn");
-    sessionStorage.removeItem("role");
-    window.location.href = "login.html";
-  }
-
-  window.onload = function () {
-    const loggedIn = sessionStorage.getItem("loggedIn");
-    const role = sessionStorage.getItem("role");
-
-    const logoutBtn = document.getElementById("logoutBtn");
-    const financeCard = document.getElementById("financeCard");
-
-    // show logout button
-    if (loggedIn === "true" && logoutBtn) {
-      logoutBtn.style.display = "inline-block";
-    }
-
-    // reset finance card
-    if (financeCard) {
-      financeCard.classList.remove("disabled");
-    }
-
-    // role-based control
-    if (role === "student") {
-      if (financeCard) financeCard.classList.add("disabled");
-    }
-
-    if (role === "officer" || role === "adviser" || role === "principal") {
-      if (financeCard) financeCard.classList.remove("disabled");
-    }
-
-    console.log("Role:", role);
-  };
-</script>
 
 </body>
 </html>

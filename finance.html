@@ -6,29 +6,79 @@
   <title>Finance</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <header class="navbar">
-    <h1>Finance</h1>
+<header class="navbar">
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="announcements.html">Announcements</a>
-  <a href="calendar.html">Calendar</a>
-  <a href="finance.html">Finance</a>
-  <a href="documents.html">Documents</a>
+  <div class="logo-area">
+    <img src="spmss logo.png" class="logo">
+    <img src="ssg logo.png" class="logo">
 
-  <span class="auth-buttons">
-    <button onclick="goLogin()">Officer Login</button>
+    <h1>SPMSS SSG HUB</h1>
+  </div>
+
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="announcements.html">Announcements</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="finance.html">Finance</a>
+    <a href="documents.html">Documents</a>
+  </nav>
+
+  <div class="auth-buttons">
+    <button onclick="goLogin()">Login</button>
     <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
-  </span>
-</nav>
-  </header>
+  </div>
 
-  <section class="hero">
-    <h2>💰 Transparency & Budget</h2>
-    <p>No financial records uploaded yet.</p>
-  </section>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <h2>💰 Finance & Transparency</h2>
+  <p>
+    Official financial records, budgets, and transparency reports of the Supreme Student Government.
+  </p>
+</section>
+
+<!-- MAIN CONTENT CARD -->
+<section class="home-section">
+
+  <div class="section-header">
+    <h2>📊 Financial Records</h2>
+  </div>
+
+  <div class="preview-list">
+    <div class="preview-item">
+      No financial records uploaded yet.
+    </div>
+  </div>
+
+</section>
+
+<footer>
+  <p>SPMSS Student Government © 2026</p>
+</footer>
+
+<script>
+  function logout() {
+    sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("role");
+    sessionStorage.removeItem("email");
+    window.location.href = "login.html";
+  }
+
+  function goLogin() {
+    window.location.href = "login.html";
+  }
+
+  window.onload = function () {
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (sessionStorage.getItem("loggedIn") === "true") {
+      logoutBtn.style.display = "inline-block";
+    }
+  }
+</script>
 
 </body>
 </html>
