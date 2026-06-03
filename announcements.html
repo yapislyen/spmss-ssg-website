@@ -67,14 +67,16 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    query,
-    orderBy
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDZP1CZVJgFLWdxypAyNB2Iqxf3I-zt8y0",
@@ -91,6 +93,7 @@
   const role = sessionStorage.getItem("role");
   const email = sessionStorage.getItem("email");
 
+  // UI CONTROL
   window.onload = function () {
     const postBox = document.getElementById("postBox");
     const logoutBtn = document.getElementById("logoutBtn");
@@ -102,7 +105,7 @@
     }
   };
 
-  // ➕ ADD ANNOUNCEMENT
+  // ADD ANNOUNCEMENT
   window.addAnnouncement = async function () {
     const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
@@ -122,36 +125,80 @@
 
     loadAnnouncements();
   };
+  // DELETE ANNOUNCEMENT
+window.deleteAnnouncement = async function(id) {
 
-  // 📥 LOAD ANNOUNCEMENTS (UI UPGRADED)
-  async function loadAnnouncements() {
-    const list = document.getElementById("announcementList");
-    list.innerHTML = "";
+  if (!confirm("Delete this announcement?")) return;
 
-    const q = query(collection(db, "announcements"), orderBy("time", "desc"));
-    const snapshot = await getDocs(q);
-
-    snapshot.forEach((docSnap) => {
-      const a = docSnap.data();
-
-      const div = document.createElement("div");
-      div.classList.add("ann-card");
-
-      div.innerHTML = `
-        <h3>${a.title}</h3>
-        <p>${a.content}</p>
-
-        <small>
-          Posted by: ${a.role} (${a.author}) <br>
-          ${a.time}
-        </small>
-      `;
-
-      list.appendChild(div);
-    });
-  }
+  await deleteDoc(doc(db, "announcements", id));
 
   loadAnnouncements();
+};
+
+  // LOAD ANNOUNCEMENTS
+async function loadAnnouncements() {
+
+  const list = document.getElementById("announcementList");
+  list.innerHTML = "";
+
+  const q = query(
+    collection(db, "announcements"),
+    orderBy("time", "desc")
+  );
+
+  const snapshot = await getDocs(q);
+
+  snapshot.forEach((docSnap) => {
+
+    const a = docSnap.data();
+    const docId = docSnap.id;
+
+    const div = document.createElement("div");
+    div.classList.add("ann-card");
+
+    const roleClass =
+      a.role === "officer" ? "role-officer" :
+      a.role === "adviser" ? "role-adviser" :
+      a.role === "principal" ? "role-principal" :
+      "role-student";
+
+    let deleteButton = "";
+
+    if (
+      role === "officer" ||
+      role === "adviser" ||
+      role === "principal"
+    ) {
+      deleteButton = `
+        <button
+          class="delete-btn"
+          onclick="deleteAnnouncement('${docId}')">
+          🗑 Delete
+        </button>
+      `;
+    }
+
+    div.innerHTML = `
+      <div class="role-badge ${roleClass}">
+        ${a.role}
+      </div>
+
+      <h3>${a.title}</h3>
+
+      <p>${a.content}</p>
+
+      <small>
+        Posted by: ${a.author}
+        <br>
+        ${a.time}
+      </small>
+
+      ${deleteButton}
+    `;
+
+    list.appendChild(div);
+  });
+}loadAnnouncements();
 </script>
 
 </body>

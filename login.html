@@ -7,74 +7,66 @@
   <link rel="stylesheet" href="style.css">
 
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDZP1CZVJgFLWdxypAyNB2Iqxf3I-zt8y0",
-    authDomain: "spmss-ssg-hub.firebaseapp.com",
-    projectId: "spmss-ssg-hub",
-    storageBucket: "spmss-ssg-hub.firebasestorage.app",
-    messagingSenderId: "399203282033",
-    appId: "1:399203282033:web:96587b2e0fb9b2eab93fd0"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZP1CZVJgFLWdxypAyNB2Iqxf3I-zt8y0",
+      authDomain: "spmss-ssg-hub.firebaseapp.com",
+      projectId: "spmss-ssg-hub",
+      storageBucket: "spmss-ssg-hub.firebasestorage.app",
+      messagingSenderId: "399203282033",
+      appId: "1:399203282033:web:96587b2e0fb9b2eab93fd0"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-  window.login = function () {
-    const email = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+    window.login = function () {
+      const email = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
 
-        // 🔥 IMPORTANT FIX: normalize email
-        const userEmail = userCredential.user.email.trim().toLowerCase();
+          const userEmail = userCredential.user.email.trim().toLowerCase();
 
-        const officerList = [
-          "officer.jiana@ssg.com",
-          "officer.lyen@ssg.com",
-          "officer.audrey@ssg.com",
-          "officer.yannis@ssg.com",
-          "officer.cathy@ssg.com",
-          "officer.eunice@ssg.com"
-        ];
+          const officerList = [
+            "officer.jiana@ssg.com",
+            "officer.lyen@ssg.com",
+            "officer.audrey@ssg.com",
+            "officer.yannis@ssg.com",
+            "officer.cathy@ssg.com",
+            "officer.eunice@ssg.com"
+          ];
 
-        const adviserEmail = "adviser.sirace@ssg.com";
-        const principalEmail = "principal.maammae@ssg.com";
+          const adviserEmail = "adviser.sirace@ssg.com";
+          const principalEmail = "principal.maammae@ssg.com";
 
-        let role = "student";
+          let role = "student";
 
-        if (officerList.includes(userEmail)) {
-          role = "officer";
-        }
-        else if (userEmail === adviserEmail) {
-          role = "adviser";
-        }
-        else if (userEmail === principalEmail) {
-          role = "principal";
-        }
+          if (officerList.includes(userEmail)) {
+            role = "officer";
+          } else if (userEmail === adviserEmail) {
+            role = "adviser";
+          } else if (userEmail === principalEmail) {
+            role = "principal";
+          }
 
-        // 💾 SAVE SESSION
-        sessionStorage.setItem("loggedIn", "true");
-        sessionStorage.setItem("role", role);
-        sessionStorage.setItem("email", userEmail);
+          sessionStorage.setItem("loggedIn", "true");
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("email", userEmail);
 
-        console.log("LOGIN ROLE:", role); // DEBUG
-
-        window.location.href = "index.html";
-      })
-      .catch((error) => {
-        document.getElementById("error").innerText = "Login failed";
-        console.log(error);
-      });
-  };
-</script>
-
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          document.getElementById("error").innerText = "Login failed";
+        });
+    };
+  </script>
 </head>
 
-<body>
+<body class="login-page">
 
   <div class="login-container">
     <h2>SSG Portal Login</h2>
