@@ -323,47 +323,77 @@ footer {
 .delete-btn:hover {
   opacity: 0.9;
 }
-/* CLEAN LOGIN CENTER (NEW) */
+/* LOGIN PAGE */
 body.login-page {
-  height: 100vh;
+  min-height: 100vh;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background: linear-gradient(135deg, #07072c, #0f2d52);
+  background: linear-gradient(
+    135deg,
+    #07072c,
+    #0f2d52
+  );
 }
 
-/* modern login card */
+/* CARD */
 .login-container {
-  width: 340px;
-  padding: 35px;
+  width: 380px;
 
   background: white;
-  border-radius: 18px;
+  padding: 40px;
 
-  box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+  border-radius: 20px;
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.25);
 
   text-align: center;
 }
 
-/* inputs inside login-container */
-.login-container input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
+/* LOGO */
+.login-logo {
+  width: 95px;
+  height: 95px;
+  object-fit: contain;
 
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-
-  outline: none;
+  margin-bottom: 10px;
 }
 
-/* button */
+/* TITLE */
+.login-header h2 {
+  margin: 0;
+  color: #07072c;
+  font-size: 28px;
+}
+
+.login-subtitle {
+  color: #6b7280;
+  margin-top: 8px;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+/* INPUTS */
+.login-container input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 14px;
+  margin-bottom: 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+/* BUTTON */
 .login-container button {
   width: 100%;
-  padding: 12px;
-
-  margin-top: 12px;
+  padding: 14px;
 
   border: none;
   border-radius: 10px;
@@ -371,9 +401,111 @@ body.login-page {
   background: #07072c;
   color: white;
 
+  font-size: 15px;
+  font-weight: bold;
+
   cursor: pointer;
+
+  transition: 0.2s;
 }
 
 .login-container button:hover {
   background: #0f2d52;
+  transform: translateY(-2px);
+}
+
+/* ERROR */
+#error {
+  margin-top: 12px;
+  color: #dc2626;
+  font-size: 13px;
+}
+.logo-row {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+
+  margin-bottom: 12px;
+}
+
+.logo-row .login-logo {
+  width: 75px;
+  height: 75px;
+}
+/* LOGO AREA */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* USER STATUS BUTTON */
+#userStatusBtn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  background: #1f2937;
+  color: white;
+  cursor: default;
+}
+/* NAVBAR LEFT GROUP CLEAN ALIGN */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+/* NAVBAR DEPTH UPGRADE */
+.navbar {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+/* NAV LINK UPGRADE */
+.navbar nav a {
+  position: relative;
+  transition: 0.2s;
+}
+
+.navbar nav a:hover {
+  transform: translateY(-1px);
+}
+/* HERO POLISH */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+/* soft glow overlay */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: radial-gradient(
+    circle at top left,
+    rgba(255,255,255,0.08),
+    transparent 60%
+  );
+
+  pointer-events: none;
+}
+/* ANNOUNCEMENT CARD POLISH */
+.ann-card {
+  transition: 0.2s;
+}
+
+.ann-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.10);
 }
