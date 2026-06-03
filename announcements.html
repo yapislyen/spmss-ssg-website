@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Announcements</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <script>
+    // 🔐 LOGIN CHECK
+    if (sessionStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    function goLogin() {
+      window.location.href = "login.html";
+    }
+
+    function logout() {
+      sessionStorage.removeItem("loggedIn");
+      sessionStorage.removeItem("role");
+      window.location.href = "login.html";
+    }
+  </script>
 </head>
 
 <body>
@@ -12,18 +31,18 @@
 <header class="navbar">
   <h1>Announcements</h1>
 
-<nav>
-  <a href="index.html">Home</a>
-  <a href="announcements.html">Announcements</a>
-  <a href="calendar.html">Calendar</a>
-  <a href="finance.html">Finance</a>
-  <a href="documents.html">Documents</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="announcements.html">Announcements</a>
+    <a href="calendar.html">Calendar</a>
+    <a href="finance.html">Finance</a>
+    <a href="documents.html">Documents</a>
+  </nav>
 
-  <span class="auth-buttons">
+  <div class="auth-buttons">
     <button onclick="goLogin()">Officer Login</button>
     <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
-  </span>
-</nav>
+  </div>
 </header>
 
 <main class="page">
@@ -32,8 +51,8 @@
     <h2>📢 Latest Announcements</h2>
   </section>
 
-  <!-- FORM -->
-  <section class="announcement-form">
+  <!-- POST BOX -->
+  <section class="announcement-form" id="postBox">
     <h3>➕ Post New Announcement</h3>
 
     <input type="text" id="title" placeholder="Announcement title">
@@ -42,29 +61,97 @@
   </section>
 
   <!-- FEED -->
-  <section class="announcement-container" id="announcementList">
-
-    <div class="announcement">
-      <h3>📢 Welcome to SSG Portal</h3>
-      <p>The official student government hub is now live.</p>
-      <small>Posted: June 2026</small>
-    </div>
-
-    <div class="announcement">
-      <h3>📅 Upcoming School Event</h3>
-      <p>Details will be posted soon.</p>
-      <small>Posted: June 2026</small>
-    </div>
-
-  </section>
+  <section id="announcementList"></section>
 
 </main>
 
-<script src="script.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-</body>
-</html>
-<script src="script.js"></script>
+  // 🔥 Firebase config (same as login page)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDZP1CZVJgFLWdxypAyNB2Iqxf3I-zt8y0",
+    authDomain: "spmss-ssg-hub.firebaseapp.com",
+    projectId: "spmss-ssg-hub",
+    storageBucket: "spmss-ssg-hub.firebasestorage.app",
+    messagingSenderId: "399203282033",
+    appId: "1:399203282033:web:96587b2e0fb9b2eab93fd0"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // 🔐 ROLE CONTROL
+  const role = sessionStorage.getItem("role");
+
+  window.onload = function () {
+    const postBox = document.getElementById("postBox");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+    // only officers+ can post
+    if (role === "student") {
+      if (postBox) postBox.style.display = "none";
+    }
+  };
+
+  // ➕ ADD ANNOUNCEMENT
+  window.addAnnouncement = async function () {
+    const title = document.getElementById("title").value;
+    const content = document.getElementById("content").value;
+
+    if (!title || !content) return;
+
+    const now = new Date();
+    const time = now.toLocaleString();
+
+    await addDoc(collection(db, "announcements"), {
+      title,
+      content,
+      time
+    });
+
+    document.getElementById("title").value = "";
+    document.getElementById("content").value = "";
+
+    loadAnnouncements();
+  };
+
+  // 📥 LOAD ANNOUNCEMENTS
+  async function loadAnnouncements() {
+    const list = document.getElementById("announcementList");
+    list.innerHTML = "";
+
+    const q = query(collection(db, "announcements"), orderBy("time", "desc"));
+    const snapshot = await getDocs(q);
+
+    snapshot.forEach((doc) => {
+      const a = doc.data();
+
+      const div = document.createElement("div");
+      div.classList.add("announcement");
+
+      div.innerHTML = `
+        <h3>${a.title}</h3>
+        <p>${a.content}</p>
+        <small style="color:gray;">Posted: ${a.time}</small>
+      `;
+
+      list.appendChild(div);
+    });
+  }
+
+  loadAnnouncements();
+</script>
 
 </body>
 </html>

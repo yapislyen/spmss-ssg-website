@@ -26,30 +26,45 @@
       const email = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
- signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
 
-    // DEFAULT ROLE
-    let role = "student";
+          const userEmail = userCredential.user.email;
 
-    // CHANGE THESE EMAILS TO YOUR REAL ACCOUNTS
-    if (email === "ssgadmin@school.com") {
-      role = "admin";
-    } 
-    else if (email === "president@school.com") {
-      role = "officer";
-    }
+          const officerList = [
+            "officer.jiana@ssg.com",
+            "officer.lyen@ssg.com",
+            "officer.audrey@ssg.com",
+            "officer.yannis@ssg.com",
+            "officer.cathy@ssg.com",
+            "officer.eunice@ssg.com"
+          ];
 
-    // SAVE LOGIN STATE
-    sessionStorage.setItem("loggedIn", "true");
-    sessionStorage.setItem("role", role);
+          const adviserEmail = "adviser.sirace@ssg.com";
+          const principalEmail = "principal.maammae@ssg.com";
 
-    window.location.href = "index.html";
-  })
-  .catch((error) => {
-    document.getElementById("error").innerText = "Login failed";
-  });
+          let role = "student";
+
+          if (officerList.includes(userEmail)) {
+            role = "officer";
+          }
+          else if (userEmail === adviserEmail) {
+            role = "adviser";
+          }
+          else if (userEmail === principalEmail) {
+            role = "principal";
+          }
+
+          // SAVE LOGIN STATE
+          sessionStorage.setItem("loggedIn", "true");
+          sessionStorage.setItem("role", role);
+          sessionStorage.setItem("email", userEmail);
+
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          document.getElementById("error").innerText = "Login failed";
+        });
     };
   </script>
 

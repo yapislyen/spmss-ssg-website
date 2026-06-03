@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-  <script>
-  if (sessionStorage.getItem("loggedIn") !== "true") {
-    window.location.href = "login.html";
-  }
-</script>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SPMSS SSG Portal</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <!-- 🔐 LOGIN PROTECTION -->
+  <script>
+    if (sessionStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <!-- 🔗 GO LOGIN -->
+  <script>
+    function goLogin() {
+      window.location.href = "login.html";
+    }
+  </script>
 </head>
-<script>
-function logout() {
-  sessionStorage.removeItem("loggedIn");
-  window.location.href = "login.html";
-}
 
-// optional UI control (simple version)
-window.onload = function () {
-  const isLoggedIn = sessionStorage.getItem("loggedIn");
-
-  if (isLoggedIn === "true") {
-    document.getElementById("logoutBtn").style.display = "inline-block";
-  }
-};
-</script>
 <body>
 
 <header class="navbar">
@@ -45,9 +42,9 @@ window.onload = function () {
   </div>
 </header>
 
+<!-- HERO -->
 <section class="hero">
   <h2>SPMSS SSG HUB</h2>
-
   <p>
     Central hub for announcements,
     proposals, records, finance,
@@ -55,6 +52,7 @@ window.onload = function () {
   </p>
 </section>
 
+<!-- ANNOUNCEMENTS PREVIEW -->
 <section class="home-section">
   <div class="section-header">
     <h2>📢 Announcements</h2>
@@ -62,54 +60,85 @@ window.onload = function () {
   </div>
 
   <div class="preview-list">
-    <div class="preview-item">
-      Welcome to the official SPMSS SSG Hub.
-    </div>
-
-    <div class="preview-item">
-      School year announcements will be posted here.
-    </div>
-
-    <div class="preview-item">
-      Upcoming student activities will be announced soon.
-    </div>
+    <div class="preview-item">Welcome to the official SPMSS SSG Hub.</div>
+    <div class="preview-item">School year announcements will be posted here.</div>
+    <div class="preview-item">Upcoming student activities will be announced soon.</div>
   </div>
 </section>
 
-<section class="home-section">
+<!-- QUICK ACCESS -->
+<section class="home-section" id="quickAccessSection">
   <div class="section-header">
     <h2>⚡ Quick Access</h2>
   </div>
 
   <section class="cards">
-<a href="announcements.html" class="card card-blue">
-  <span>📢</span>
-  <p>Announcements</p>
-</a>
 
-<a href="calendar.html" class="card card-green">
-  <span>📅</span>
-  <p>Calendar</p>
-</a>
+    <a href="announcements.html" class="card card-blue">
+      <span>📢</span>
+      <p>Announcements</p>
+    </a>
 
-<a href="documents.html" class="card card-orange">
-  <span>💡</span>
-  <p>Documents</p>
-</a>
+    <a href="calendar.html" class="card card-green">
+      <span>📅</span>
+      <p>Calendar</p>
+    </a>
 
-<a href="finance.html" class="card card-red">
-  <span>💰</span>
-  <p>Finance</p>
-</a>
+    <a href="documents.html" class="card card-orange">
+      <span>💡</span>
+      <p>Documents</p>
+    </a>
+
+    <a href="finance.html" class="card card-red" id="financeCard">
+      <span>💰</span>
+      <p>Finance</p>
+    </a>
+
+  </section>
 </section>
 
-  <footer>
-    <p>SPMSS Student Government © 2026</p>
-  </footer>
+<!-- FOOTER -->
+<footer>
+  <p>SPMSS Student Government © 2026</p>
+</footer>
 
-  <script src="script.js"></script>
+<!-- 🔐 MAIN SCRIPT -->
+<script>
+  function logout() {
+    sessionStorage.removeItem("loggedIn");
+    sessionStorage.removeItem("role");
+    window.location.href = "login.html";
+  }
+
+  window.onload = function () {
+    const loggedIn = sessionStorage.getItem("loggedIn");
+    const role = sessionStorage.getItem("role");
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    const financeCard = document.getElementById("financeCard");
+
+    // show logout button
+    if (loggedIn === "true" && logoutBtn) {
+      logoutBtn.style.display = "inline-block";
+    }
+
+    // reset finance card
+    if (financeCard) {
+      financeCard.classList.remove("disabled");
+    }
+
+    // role-based control
+    if (role === "student") {
+      if (financeCard) financeCard.classList.add("disabled");
+    }
+
+    if (role === "officer" || role === "adviser" || role === "principal") {
+      if (financeCard) financeCard.classList.remove("disabled");
+    }
+
+    console.log("Role:", role);
+  };
+</script>
+
 </body>
 </html>
-function goLogin() {
-  window.location.href = "login.html";
-}
