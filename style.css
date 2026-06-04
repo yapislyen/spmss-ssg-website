@@ -535,75 +535,110 @@ body.login-page {
   margin-top: 8px;
   color: #07072c;
 }
-/* =========================
-   📱 MOBILE DASHBOARD UPGRADE
-========================= */
+/* ======================================
+   📱 TRUE MOBILE-FIRST DASHBOARD UPGRADE
+====================================== */
 @media (max-width: 768px) {
 
-  /* NAVBAR CLEAN STACK */
+  /* NAVBAR → APP STYLE */
   .navbar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 8px;
+    padding: 12px 16px;
+  }
+
+  .logo-area {
+    gap: 8px;
+  }
+
+  .navbar h1 {
+    font-size: 14px;
   }
 
   .navbar nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
   }
 
   .navbar nav a {
+    font-size: 12px;
     margin-left: 0;
-    font-size: 13px;
+    opacity: 0.9;
   }
 
-  /* HERO becomes tighter */
+  /* HERO → tighter + more app-like */
   .hero {
-    padding: 35px 18px;
     margin: 12px;
+    padding: 28px 16px;
     border-radius: 14px;
   }
 
   .hero h2 {
-    font-size: 26px;
+    font-size: 22px;
+    line-height: 1.2;
   }
 
   .hero p {
+    font-size: 13px;
+    max-width: 100%;
+  }
+
+  /* HOME SECTIONS → card stacking feel */
+  .home-section {
+    margin: 12px;
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  /* SECTION HEADER */
+  .section-header h2 {
     font-size: 14px;
   }
 
-  /* QUICK ACCESS FIX */
+  .section-header a {
+    font-size: 12px;
+  }
+
+  /* QUICK ACCESS → REAL APP GRID */
   .cards {
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
   }
 
   .card {
     min-height: 110px;
+    border-radius: 14px;
   }
 
   .card span {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .card p {
-    font-size: 14px;
-  }
-
-  /* HOME SECTIONS CLEAN STACK */
-  .home-section {
-    margin: 12px;
-    padding: 16px;
-  }
-
-  /* ANNOUNCEMENT PREVIEW MOBILE */
-  .preview-item {
     font-size: 13px;
   }
 
-  /* USER STATUS BUTTON SMALLER */
-  #userStatusBtn {
+  /* ANNOUNCEMENTS → compact feed */
+  .preview-item {
+    font-size: 12px;
+    padding: 8px 0;
+  }
+
+  /* MAKE EVERYTHING LESS “SPACED OUT” */
+  body {
+    background: #eef1f6;
+  }
+
+  footer {
+    font-size: 11px;
+    padding: 14px;
+  }
+
+  /* BUTTONS SMALLER (TOP RIGHT LOGIN) */
+  #userStatusBtn,
+  #logoutBtn {
     font-size: 11px;
     padding: 5px 8px;
   }
