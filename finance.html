@@ -1,20 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Finance</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finance</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+/* =========================
+   HERO (CLEAN FINANCE STYLE)
+========================= */
+.hero {
+  padding: 70px 50px;
+  border-radius: 18px;
+  margin: 20px;
+
+  background: linear-gradient(
+    135deg,
+    #07072c 0%,
+    #0f2d52 55%,
+    #1a3a66 100%
+  );
+
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.12), transparent 60%);
+}
+
+.hero h2 {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+/* =========================
+   DASHBOARD (REAL ERP STYLE)
+========================= */
+.finance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin: 20px;
+}
+
+.finance-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.finance-card:hover {
+  transform: translateY(-3px);
+}
+
+.finance-card h3 {
+  font-size: 12px;
+  margin: 0;
+  color: #6b7280;
+}
+
+.finance-card p {
+  font-size: 20px;
+  margin-top: 6px;
+  font-weight: bold;
+  color: #07072c;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+.home-section {
+  background: white;
+  margin: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.home-section h2 {
+  font-size: 16px;
+  color: #0f2d52;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* =========================
+   TABLE FIX (IMPORTANT)
+========================= */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 600px;
+}
+
+th {
+  background: #07072c;
+  color: white;
+  text-align: left;
+  padding: 10px;
+  font-size: 12px;
+  position: sticky;
+  top: 0;
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+tr:hover td {
+  background: #f4f6f9;
+}
+
+/* =========================
+   COLLAPSE
+========================= */
+.hidden {
+  display: none;
+}
+
+.toggle-btn {
+  background: #07072c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .hero { padding: 40px 20px; }
+  .hero h2 { font-size: 28px; }
+  table { font-size: 11px; }
+}
+
+</style>
 </head>
 
 <body>
 
+<!-- NAVBAR -->
 <header class="navbar">
-
   <div class="logo-area">
     <img src="spmss logo.png" class="logo">
     <img src="ssg logo.png" class="logo">
-
     <h1>SPMSS SSG HUB</h1>
   </div>
 
@@ -27,33 +182,64 @@
   </nav>
 
   <div class="auth-buttons">
-    <button onclick="goLogin()">Login</button>
+    <button id="userStatusBtn">Loading...</button>
     <button onclick="logout()" id="logoutBtn" style="display:none;">Logout</button>
   </div>
-
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <h2>💰 Finance & Transparency</h2>
-  <p>
-    Official financial records, budgets, and transparency reports of the Supreme Student Government.
-  </p>
+  <h2>💰 Finance & Transparency Portal</h2>
+  <p>Live financial tracking powered by Google Sheets (SSG official system).</p>
 </section>
 
-<!-- MAIN CONTENT CARD -->
+<!-- DASHBOARD -->
+<section class="finance-grid">
+
+  <div class="finance-card">
+    <h3>Total Budget</h3>
+    <p id="totalBudget">Loading...</p>
+  </div>
+
+  <div class="finance-card">
+    <h3>Total Income</h3>
+    <p id="totalIncome">Loading...</p>
+  </div>
+
+  <div class="finance-card">
+    <h3>Total Expenses</h3>
+    <p id="totalExpenses">Loading...</p>
+  </div>
+
+  <div class="finance-card">
+    <h3>Remaining Balance</h3>
+    <p id="remainingBalance">Loading...</p>
+  </div>
+
+</section>
+
+<!-- EXPENSES -->
 <section class="home-section">
+  <h2>📉 Expenses <button class="toggle-btn" onclick="toggle('expenseTable')">Hide</button></h2>
+  <div class="table-wrapper" id="expenseTable"></div>
+</section>
 
-  <div class="section-header">
-    <h2>📊 Financial Records</h2>
-  </div>
+<!-- INCOME -->
+<section class="home-section">
+  <h2>📈 Income <button class="toggle-btn" onclick="toggle('incomeTable')">Hide</button></h2>
+  <div class="table-wrapper" id="incomeTable"></div>
+</section>
 
-  <div class="preview-list">
-    <div class="preview-item">
-      No financial records uploaded yet.
-    </div>
-  </div>
+<!-- BUDGET -->
+<section class="home-section">
+  <h2>📊 Budget Tracker <button class="toggle-btn" onclick="toggle('budgetTable')">Hide</button></h2>
+  <div class="table-wrapper" id="budgetTable"></div>
+</section>
 
+<!-- RECEIPTS -->
+<section class="home-section">
+  <h2>🧾 Receipts <button class="toggle-btn" onclick="toggle('receiptTable')">Hide</button></h2>
+  <div class="table-wrapper" id="receiptTable"></div>
 </section>
 
 <footer>
@@ -61,23 +247,94 @@
 </footer>
 
 <script>
-  function logout() {
-    sessionStorage.removeItem("loggedIn");
-    sessionStorage.removeItem("role");
-    sessionStorage.removeItem("email");
-    window.location.href = "login.html";
+function logout() {
+  sessionStorage.clear();
+  window.location.href = "login.html";
+}
+
+function toggle(id) {
+  document.getElementById(id).classList.toggle("hidden");
+}
+
+window.onload = function () {
+  const logoutBtn = document.getElementById("logoutBtn");
+  const role = sessionStorage.getItem("role");
+
+  if (sessionStorage.getItem("loggedIn") === "true") {
+    logoutBtn.style.display = "inline-block";
   }
 
-  function goLogin() {
-    window.location.href = "login.html";
-  }
+  document.getElementById("userStatusBtn").innerText =
+    role ? `Logged in as ${role}` : "Not logged in";
+};
+</script>
 
-  window.onload = function () {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (sessionStorage.getItem("loggedIn") === "true") {
-      logoutBtn.style.display = "inline-block";
-    }
-  }
+<script>
+const EXPENSE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-x6DgOiVtooSDn7J8AxpmGSqxLMHY52y_DHDyav2kXzU5O8S3SEu--8i-O78B1OqTzWTE/pub?gid=0&single=true&output=csv";
+const INCOME_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-x6DgOiVtooSDn7J8AxpmGSqxLMHY52y_DHDyav2kXzU5O8S3SEu--8i-O78B1OqTzWTE/pub?gid=1735682862&single=true&output=csv";
+const BUDGET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-x6DgOiVtooSDn7J8AxpmGSqxLMHY52y_DHDyav2kXzU5O8S3SEu--8i-O78B1OqTzWTE/pub?gid=1113685339&single=true&output=csv";
+const RECEIPT_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-x6DgOiVtooSDn7J8AxpmGSqxLMHY52y_DHDyav2kXzU5O8S3SEu--8i-O78B1OqTzWTE/pub?gid=630220928&single=true&output=csv";
+const SUMMARY_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-x6DgOiVtooSDn7J8AxpmGSqxLMHY52y_DHDyav2kXzU5O8S3SEu--8i-O78B1OqTzWTE/pub?gid=1849217197&single=true&output=csv";
+
+async function loadCSV(url) {
+  const res = await fetch(url);
+  const text = await res.text();
+  return text.trim().split("\n").map(r => r.split(","));
+}
+
+/* FIX: removes ₱ and commas */
+function cleanNumber(val) {
+  return parseFloat(String(val).replace(/[₱,]/g, "")) || 0;
+}
+
+function sumColumn(data, index) {
+  return data.slice(1).reduce((sum, row) =>
+    sum + cleanNumber(row[index]), 0
+  );
+}
+
+function renderTable(id, data) {
+  const container = document.getElementById(id);
+  if (!container) return;
+
+  let html = "<table>";
+  data.forEach((row, i) => {
+    html += "<tr>";
+    row.forEach(cell => {
+      html += i === 0 ? `<th>${cell}</th>` : `<td>${cell}</td>`;
+    });
+    html += "</tr>";
+  });
+  html += "</table>";
+
+  container.innerHTML = html;
+}
+
+async function loadFinance() {
+  const expenses = await loadCSV(EXPENSE_URL);
+  const income = await loadCSV(INCOME_URL);
+  const budget = await loadCSV(BUDGET_URL);
+  const receipts = await loadCSV(RECEIPT_URL);
+  const summary = await loadCSV(SUMMARY_URL);
+
+  renderTable("expenseTable", expenses);
+  renderTable("incomeTable", income);
+  renderTable("budgetTable", budget);
+  renderTable("receiptTable", receipts);
+
+  const totalExpenses = sumColumn(expenses, 2);
+  const totalIncome = sumColumn(income, 2);
+  const totalBudget = summary[1] ? cleanNumber(summary[1][1]) : 0;
+
+  document.getElementById("totalBudget").textContent = "₱" + totalBudget.toLocaleString();
+  document.getElementById("totalIncome").textContent = "₱" + totalIncome.toLocaleString();
+  document.getElementById("totalExpenses").textContent = "₱" + totalExpenses.toLocaleString();
+  document.getElementById("remainingBalance").textContent =
+    "₱" + (totalBudget + totalIncome - totalExpenses).toLocaleString();
+}
+
+loadFinance();
+setInterval(loadFinance, 30000);
 </script>
 
 </body>

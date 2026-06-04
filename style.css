@@ -509,3 +509,102 @@ body.login-page {
   transform: translateY(-3px);
   box-shadow: 0 8px 18px rgba(0,0,0,0.10);
 }
+.finance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.finance-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.finance-card h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.finance-card p {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 8px;
+  color: #07072c;
+}
+/* =========================
+   📱 MOBILE DASHBOARD UPGRADE
+========================= */
+@media (max-width: 768px) {
+
+  /* NAVBAR CLEAN STACK */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .navbar nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .navbar nav a {
+    margin-left: 0;
+    font-size: 13px;
+  }
+
+  /* HERO becomes tighter */
+  .hero {
+    padding: 35px 18px;
+    margin: 12px;
+    border-radius: 14px;
+  }
+
+  .hero h2 {
+    font-size: 26px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+
+  /* QUICK ACCESS FIX */
+  .cards {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    min-height: 110px;
+  }
+
+  .card span {
+    font-size: 28px;
+  }
+
+  .card p {
+    font-size: 14px;
+  }
+
+  /* HOME SECTIONS CLEAN STACK */
+  .home-section {
+    margin: 12px;
+    padding: 16px;
+  }
+
+  /* ANNOUNCEMENT PREVIEW MOBILE */
+  .preview-item {
+    font-size: 13px;
+  }
+
+  /* USER STATUS BUTTON SMALLER */
+  #userStatusBtn {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+}
