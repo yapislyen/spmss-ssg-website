@@ -535,111 +535,61 @@ body.login-page {
   margin-top: 8px;
   color: #07072c;
 }
-/* ======================================
-   📱 TRUE MOBILE-FIRST DASHBOARD UPGRADE
-====================================== */
+/* =========================
+   📱 SSG APP MODE (MOBILE ONLY)
+========================= */
+
+.mobile-nav {
+  display: none;
+}
+
+/* show ONLY on mobile */
 @media (max-width: 768px) {
 
-  /* NAVBAR → APP STYLE */
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    padding: 12px 16px;
-  }
-
-  .logo-area {
-    gap: 8px;
-  }
-
-  .navbar h1 {
-    font-size: 14px;
-  }
-
-  .navbar nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .navbar nav a {
-    font-size: 12px;
-    margin-left: 0;
-    opacity: 0.9;
-  }
-
-  /* HERO → tighter + more app-like */
-  .hero {
-    margin: 12px;
-    padding: 28px 16px;
-    border-radius: 14px;
-  }
-
-  .hero h2 {
-    font-size: 22px;
-    line-height: 1.2;
-  }
-
-  .hero p {
-    font-size: 13px;
-    max-width: 100%;
-  }
-
-  /* HOME SECTIONS → card stacking feel */
-  .home-section {
-    margin: 12px;
-    padding: 14px;
-    border-radius: 14px;
-  }
-
-  /* SECTION HEADER */
-  .section-header h2 {
-    font-size: 14px;
-  }
-
-  .section-header a {
-    font-size: 12px;
-  }
-
-  /* QUICK ACCESS → REAL APP GRID */
-  .cards {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .card {
-    min-height: 110px;
-    border-radius: 14px;
-  }
-
-  .card span {
-    font-size: 26px;
-  }
-
-  .card p {
-    font-size: 13px;
-  }
-
-  /* ANNOUNCEMENTS → compact feed */
-  .preview-item {
-    font-size: 12px;
-    padding: 8px 0;
-  }
-
-  /* MAKE EVERYTHING LESS “SPACED OUT” */
+  /* IMPORTANT: prevent overlap */
   body {
-    background: #eef1f6;
+    padding-bottom: 70px;
   }
 
-  footer {
-    font-size: 11px;
-    padding: 14px;
+  .mobile-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background: #07072c;
+    padding: 10px 0;
+
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+
+    z-index: 999;
   }
 
-  /* BUTTONS SMALLER (TOP RIGHT LOGIN) */
-  #userStatusBtn,
-  #logoutBtn {
-    font-size: 11px;
-    padding: 5px 8px;
+  .mobile-nav a {
+    text-decoration: none;
+    color: rgba(255,255,255,0.7);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    font-size: 18px;
+    gap: 2px;
+  }
+
+  .mobile-nav a span {
+    font-size: 10px;
+  }
+
+  .mobile-nav a.active {
+    color: white;
+  }
+
+  .mobile-nav a:hover {
+    color: white;
   }
 }
