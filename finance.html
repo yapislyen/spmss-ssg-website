@@ -6,6 +6,7 @@
 <title>Finance</title>
 
 <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 <style>
 
@@ -108,6 +109,12 @@
 .table-wrapper {
   overflow-x: auto;
   margin-top: 10px;
+}
+
+#incomeTable {
+  max-height: 300px;
+  overflow-y: auto;
+  display: block;
 }
 
 table {
@@ -277,20 +284,28 @@ const RECEIPT_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-
 const SUMMARY_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7Q3-ny4-x6DgOiVtooSDn7J8AxpmGSqxLMHY52y_DHDyav2kXzU5O8S3SEu--8i-O78B1OqTzWTE/pub?gid=1849217197&single=true&output=csv";
 
 async function loadCSV(url) {
-  const res = await fetch(url);
+  const res = await fetch(url + "&t=" + Date.now());
   const text = await res.text();
-  return text.trim().split("\n").map(r => r.split(","));
+
+  return Papa.parse(text, {
+    skipEmptyLines: true
+  }).data;
 }
 
 /* FIX: removes ₱ and commas */
 function cleanNumber(val) {
-  return parseFloat(String(val).replace(/[₱,]/g, "")) || 0;
+  return parseFloat(
+    String(val)
+      .replace(/[₱,"]/g, "")   // remove peso, commas, quotes
+      .replace(/\s+/g, "")     // remove ALL spaces (this is the key fix)
+  ) || 0;
 }
 
 function sumColumn(data, index) {
-  return data.slice(1).reduce((sum, row) =>
-    sum + cleanNumber(row[index]), 0
-  );
+  return data.slice(1).reduce((sum, row) => {
+    const val = row?.[index];
+    return sum + cleanNumber(val || 0);
+  }, 0);
 }
 
 function renderTable(id, data) {
@@ -318,13 +333,32 @@ async function loadFinance() {
   const summary = await loadCSV(SUMMARY_URL);
 
   renderTable("expenseTable", expenses);
-  renderTable("incomeTable", income);
+const cleanIncome = income.filter(row => {
+  return row.some(cell => {
+    const text = String(cell || "")
+      .toUpperCase()
+      .replace(/\s+/g, " ")
+      .trim();
+
+    return (
+      text !== "" &&
+      !text.includes("INCOME SHEET") &&
+      !text.includes("TOTAL") &&
+      !text.includes("₱0.00")
+    );
+  });
+});
+
+renderTable("incomeTable", cleanIncome);
   renderTable("budgetTable", budget);
   renderTable("receiptTable", receipts);
 
-  const totalExpenses = sumColumn(expenses, 2);
-  const totalIncome = sumColumn(income, 2);
-  const totalBudget = summary[1] ? cleanNumber(summary[1][1]) : 0;
+const totalExpenses = sumColumn(expenses, 1);
+const totalIncome = sumColumn(income, 1);
+const totalBudget = summary
+  .flat()
+  .map(cleanNumber)
+  .reduce((max, n) => n > max ? n : max, 0);
 
   document.getElementById("totalBudget").textContent = "₱" + totalBudget.toLocaleString();
   document.getElementById("totalIncome").textContent = "₱" + totalIncome.toLocaleString();
