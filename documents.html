@@ -253,13 +253,24 @@ window.addDoc = async function () {
 
   if (!title || !link) return alert("Fill all fields");
 
-  await addDoc(collection(db, "documents"), {
-    title,
-    link,
-    status: "pending",
-    role,
-    time: serverTimestamp()
-  });
+await addDoc(collection(db, "documents"), {
+  title,
+  link,
+
+  status: "pending",
+
+  adviserApproval: false,
+  principalApproval: false,
+
+  adviserRejected: false,
+  principalRejected: false,
+
+  adviserName: "",
+  principalName: "",
+
+  role,
+  time: serverTimestamp()
+});
 
   document.getElementById("docTitle").value = "";
   document.getElementById("docLink").value = "";
@@ -275,18 +286,47 @@ function loadDocs() {
 
     snapshot.forEach((d) => {
       const docData = d.data();
+      if(
+  docData.adviserApproval &&
+  docData.principalApproval &&
+  docData.status !== "approved"
+){
+  updateDoc(
+    doc(db,"documents",d.id),
+    {
+      status:"approved"
+    }
+  );
+}
 
       const div = document.createElement("div");
       div.className = "doc-card";
 
       let buttons = "";
 
-      if (role === "officer" || role === "admin") {
-        buttons = `
-          <button onclick="updateStatus('${d.id}','approved')">Approve</button>
-          <button onclick="updateStatus('${d.id}','rejected')">Reject</button>
-        `;
-      }
+if (role === "adviser") {
+  buttons += `
+    <button onclick="approveDocument('${d.id}','adviser')">
+      Adviser Approve
+    </button>
+
+    <button onclick="rejectDocument('${d.id}','adviser')">
+      Adviser Reject
+    </button>
+  `;
+}
+
+if (role === "principal") {
+  buttons += `
+    <button onclick="approveDocument('${d.id}','principal')">
+      Principal Approve
+    </button>
+
+    <button onclick="rejectDocument('${d.id}','principal')">
+      Principal Reject
+    </button>
+  `;
+}
 
       if (role === "admin") {
         buttons += `<button onclick="deleteDoc('${d.id}')">Delete</button>`;
@@ -299,9 +339,39 @@ function loadDocs() {
           ${docData.time?.toDate ? docData.time.toDate().toLocaleString() : "Just now"}
         </div>
 
-        <span class="status ${docData.status}">
-          ${docData.status.toUpperCase()}
-        </span>
+<span class="status ${docData.status}">
+  ${docData.status.toUpperCase()}
+</span>
+
+<div class="doc-meta">
+
+  Adviser:
+  ${
+    docData.adviserApproval
+      ? "✅ Approved"
+      : docData.adviserRejected
+      ? "❌ Rejected"
+      : "⏳ Pending"
+  }
+
+  <br>
+
+  Principal:
+  ${
+    docData.principalApproval
+      ? "✅ Approved"
+      : docData.principalRejected
+      ? "❌ Rejected"
+      : "⏳ Pending"
+  }
+
+  <br><br>
+
+  Progress:
+  ${(docData.adviserApproval ? 1 : 0) +
+    (docData.principalApproval ? 1 : 0)}/2
+
+</div>
 
         <div class="doc-actions">
           <a href="${docData.link}" target="_blank">Open Google Doc</a>
@@ -315,11 +385,65 @@ function loadDocs() {
   });
 }
 
-/* UPDATE STATUS */
-window.updateStatus = async function (id, status) {
-  await updateDoc(doc(db, "documents", id), {
-    status: status
-  });
+window.approveDocument = async function(id, approver){
+
+  const email =
+    sessionStorage.getItem("email");
+
+  if(approver === "adviser"){
+
+    await updateDoc(
+      doc(db,"documents",id),
+      {
+        adviserApproval:true,
+        adviserName:email
+      }
+    );
+
+  }
+
+  if(approver === "principal"){
+
+    await updateDoc(
+      doc(db,"documents",id),
+      {
+        principalApproval:true,
+        principalName:email
+      }
+    );
+
+  }
+
+};
+window.approveDocument = async function(id, approver){
+
+  const email =
+    sessionStorage.getItem("email");
+
+  if(approver === "adviser"){
+
+    await updateDoc(
+      doc(db,"documents",id),
+      {
+        adviserApproval:true,
+        adviserName:email
+      }
+    );
+
+  }
+
+  if(approver === "principal"){
+
+    await updateDoc(
+      doc(db,"documents",id),
+      {
+        principalApproval:true,
+        principalName:email
+      }
+    );
+
+  }
+
 };
 
 /* DELETE */
