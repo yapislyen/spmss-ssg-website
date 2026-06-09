@@ -268,6 +268,9 @@ await addDoc(collection(db, "documents"), {
   adviserName: "",
   principalName: "",
 
+  uploadedBy: sessionStorage.getItem("email"),
+  uploadedRole: role,
+
   role,
   time: serverTimestamp()
 });
@@ -335,9 +338,13 @@ if (role === "principal") {
       div.innerHTML = `
         <div class="doc-title">${docData.title}</div>
 
-        <div class="doc-meta">
-          ${docData.time?.toDate ? docData.time.toDate().toLocaleString() : "Just now"}
-        </div>
+<div class="doc-meta">
+  ${docData.time?.toDate ? docData.time.toDate().toLocaleString() : "Just now"}
+  <br>
+  Uploaded By:
+  ${docData.uploadedBy || "Unknown"}
+  (${docData.uploadedRole || "Unknown"})
+</div>
 
 <span class="status ${docData.status}">
   ${docData.status.toUpperCase()}
